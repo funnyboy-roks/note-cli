@@ -1,0 +1,9 @@
+{
+  "name": "note-cli",
+  "version": "1.0.0",
+  "description": "Create note markdown things with the CLI",
+  "main": "src/index.js",
+  "keywords": [],
+  "author": "funnyboy_roks (https://www.funnyboyroks.com)",
+  "license": "MIT"
+}
