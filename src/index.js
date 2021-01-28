@@ -12,7 +12,7 @@ if (fs.existsSync('notes-info.json')) {
 }
 const cwdDir = fs.readdirSync(process.cwd());
 cwdDir.forEach((dir) => {
-	if (/^[\w\s-]+$/.test(dir)) {
+	if (fs.lstatSync(path.join(process.cwd(), dir)).isDirectory()) {
 		const fileCheck = fs.readdirSync(dir);
 		if (fileCheck.includes('notes-info.json')) {
 			notebookDirs[dir] = path.join(process.cwd(), dir);
@@ -130,9 +130,9 @@ async function newNote(nbName, options) {
 			message: 'What class would you like to make your note in?',
 			choices: () => {
 				if (process.cwd().endsWith(nbName)) {
-					return fs.readdirSync('./').filter((str) => /^[\w\s-]+$/.test(str));
+					return fs.readdirSync('./').filter((str) => fs.lstatSync(path.join('./', str)).isDirectory());
 				}
-				return fs.readdirSync(nbName).filter((str) => /^[\w\s-]+$/.test(str));
+				return fs.readdirSync(nbName).filter((str) => fs.lstatSync(path.join(nbName, str)).isDirectory());
 			},
 		},
 		{
@@ -144,9 +144,18 @@ async function newNote(nbName, options) {
 		},
 	]);
 
+	const filePath = path.join(options.path, answers.className);
+	let prefix = 0;
+	let fileName = +prefix !== 0 ? prefix + answers.noteName : answers.noteName;
+	while (fs.readdirSync(filePath).includes(fileName)) {
+		prefix += 1;
+		fileName = +prefix !== 0 ? prefix + answers.noteName : answers.noteName;
+	}
 	if (fs.existsSync(path.join(options.path, 'note-template.md'))) {
 		const templateText = fs.readFileSync(path.join(options.path, 'note-template.md'), 'utf8');
-		fs.writeFileSync(path.join(options.path, answers.className, answers.noteName), templateText, 'utf8');
+		fs.writeFileSync(path.join(filePath, fileName), templateText, 'utf8');
+	} else {
+		fs.writeFileSync(path.join(filePath, fileName), '', 'utf8');
 	}
 
 	// fs.writeFileSync(path.join(options.path), )
