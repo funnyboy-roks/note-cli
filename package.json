@@ -1,9 +1,19 @@
 {
   "name": "note-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create note markdown things with the CLI",
   "main": "src/index.js",
+  "bin": "src/index.js",
   "keywords": [],
   "author": "funnyboy_roks (https://www.funnyboyroks.com)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^7.3.3"
+  },
+  "type": "module",
+  "devDependencies": {
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
 }
